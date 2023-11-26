@@ -7,8 +7,13 @@
   font-family: "Poppins", sans-serif;
 }
 
+.image-generator .api-key-info {
+  font-size: 1.2rem !important;
+  /* Add any additional styles if desired */
+}
+
 .image-generator {
-  height: 40vh;
+  height: 55vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +22,10 @@
   background-size: cover;
   background-position: center;
 }
-
+.image-generator p a {
+  color: #339cff; /* Change this to the desired color */
+  text-decoration: underline;
+}
 .image-generator::before {
   content: "";
   position: absolute;
@@ -48,14 +56,15 @@
 }
 
 .image-generator .generate-form {
-  height: 56px;
+  height: 60px;
+  width: 662px;
   padding: 6px;
   display: flex;
   margin-bottom: 15px;
   background: #fff;
   align-items: center;
   border-radius: 30px;
-  margin-top: 45px;
+  margin-top: 50px;
   justify-content: space-between;
 }
 
@@ -66,14 +75,20 @@
   padding: 0 17px;
   border: none;
   background: none;
-  font-size: 1rem;
-  border-radius: 30px;
+  /* font-size: 1rem; */
+  border-radius: 0px;
 }
-
+.generate-form .api-key-input {
+  margin-top: 0px;
+  padding: 8px;
+  border: 1px solid rgb(107, 240, 134);
+  border-radius: 80px;
+  box-sizing: border-box;
+}
 .generate-form .controls {
   display: flex;
   height: 100%;
-  gap: 15px;
+  gap: 10px;
 }
 
 .generate-form .img-quantity {
@@ -81,7 +96,8 @@
   border: none;
   height: 44px;
   background: none;
-  font-size: 1rem;
+  padding: 10px;
+  font-size: 0.85rem;
 }
 
 .generate-form .generate-btn {
@@ -92,7 +108,7 @@
   color: #fff;
   cursor: pointer;
   height: 100%;
-  padding: 0 25px;
+  padding: 0 32px;
   border-radius: 30px;
   background: #4949E7;
 }

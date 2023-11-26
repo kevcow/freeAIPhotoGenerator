@@ -1,8 +1,9 @@
-const generateForm = document.querySelector(".generate-form");
+const generateForm = document.querySelector("#imageGenerationForm");
+
 const generateBtn = generateForm.querySelector(".generate-btn");
 const imageGallery = document.querySelector(".image-gallery");
 
-const OPENAI_API_KEY = "insert OpenAI API key"; // Your OpenAI API key here
+let OPENAI_API_KEY = "insert open ai key"; // Your OpenAI API key here
 let isImageGenerating = false;
 
 const updateImageCard = (imgDataArray) => {
@@ -24,14 +25,14 @@ const updateImageCard = (imgDataArray) => {
   });
 }
 
-const generateAiImages = async (userPrompt, userImgQuantity) => {
+const generateAiImages = async (userPrompt, userImgQuantity, apiKey) => {
   try {
     // Send a request to the OpenAI API to generate images based on user inputs
     const response = await fetch("https://api.openai.com/v1/images/generations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         prompt: userPrompt,
@@ -42,7 +43,7 @@ const generateAiImages = async (userPrompt, userImgQuantity) => {
     });
 
     // Throw an error message if the API response is unsuccessful
-    if(!response.ok) throw new Error("Failed to generate AI images. Make sure your API key is valid.");
+    if (!response.ok) throw new Error("Failed to generate AI images. Make sure your API key is valid.");
 
     const { data } = await response.json(); // Get data from the response
     updateImageCard([...data]);
@@ -55,31 +56,42 @@ const generateAiImages = async (userPrompt, userImgQuantity) => {
   }
 }
 
+
 const handleImageGeneration = (e) => {
   e.preventDefault();
-  if(isImageGenerating) return;
+  if (isImageGenerating) return;
 
-  // Get user input and image quantity values
-  const userPrompt = e.srcElement[0].value;
-  const userImgQuantity = parseInt(e.srcElement[1].value);
-  
+  // Get user input, image quantity, and API key values
+  const userPrompt = e.target[0].value;
+  const userImgQuantity = parseInt(e.target.querySelector(".img-quantity").options[e.target.querySelector(".img-quantity").selectedIndex].value);
+
+  const apiKey = e.srcElement.querySelector(".api-key-input").value;
+
+  // Debugging statements to check values
+  console.log("User Prompt:", userPrompt);
+  console.log("Image Quantity:", userImgQuantity);
+  console.log("API Key:", apiKey);
+  // Update OPENAI_API_KEY with the entered API key
+  OPENAI_API_KEY = apiKey;
+
   // Disable the generate button, update its text, and set the flag
   generateBtn.setAttribute("disabled", true);
   generateBtn.innerText = "Generating";
   isImageGenerating = true;
-  
+
   // Creating HTML markup for image cards with loading state
-  const imgCardMarkup = Array.from({ length: userImgQuantity }, () => 
-      `<div class="img-card loading">
-        <img src="images/loader.svg" alt="AI generated image">
-        <a class="download-btn" href="#">
-          <img src="images/download.svg" alt="download icon">
-        </a>
-      </div>`
+  const imgCardMarkup = Array.from({ length: userImgQuantity }, () =>
+    `<div class="img-card loading">
+      <img src="images/loader.svg" alt="AI generated image">
+      <a class="download-btn" href="#">
+        <img src="images/download.svg" alt="download icon">
+      </a>
+    </div>`
   ).join("");
 
   imageGallery.innerHTML = imgCardMarkup;
-  generateAiImages(userPrompt, userImgQuantity);
+  generateAiImages(userPrompt, userImgQuantity, OPENAI_API_KEY);
 }
+
 
 generateForm.addEventListener("submit", handleImageGeneration);
